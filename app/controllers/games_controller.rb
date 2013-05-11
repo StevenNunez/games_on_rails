@@ -1,18 +1,23 @@
 class GamesController < ApplicationController
   def index
-    @time = Time.now
     @games = {
       "Magic 8 Ball" => magic_8_ball_path,
-      "Secret Number" => secret_number_path
+      "Secret Number" => secret_number_path,
+      "Rock Paper Scissors" => rps_path
     }
+
+    @rps_description = %{Rock-paper-scissors is a hand game usually played by two people, where players simultaneously form one of three shapes with an outstretched hand. The "rock" beats scissors, the "scissors" beat paper and the "paper" beats rock; if both players throw the same shape, the game is tied. Other names for the game in the English-speaking world include roshambo, and other orderings of the three items.[1][2]
+The game is often used as a choosing method in a way similar to coin flipping, drawing straws, or throwing dice. Unlike truly random selection methods, however, rock-paper-scissors can be played with a degree of skill by recognizing and exploiting non-random behavior in opponents}
   end
 
   def magic_8_ball
-
+    if params[:question]
+      redirect_to magic_8_ball_play_path(params[:question][:question])
+    end
   end
 
   def magic_8_ball_play
-    @question = params["question"].humanize
+    @question = params["question"].humanize.titleize + "?"
     fortunes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes definitely",
      "You may rely on it", "As I see it yes", "Most likely", "Outlook good",
      "Yes", "Signs point to yes", "Reply hazy try again", "Ask again later",
@@ -23,6 +28,10 @@ class GamesController < ApplicationController
    end
 
    def secret_number
+   end
+
+   def rock_paper_scissors
+
    end
 
    def rock_paper_scissors_play
@@ -48,7 +57,7 @@ class GamesController < ApplicationController
     if @guess == @answer
       render "win"
     else
-      redirect_to "http://www.youtube.com/watch?v=oHg5SJYRHA0"
+      render 'lose'
     end
   end
 end
